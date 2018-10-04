@@ -1,0 +1,20 @@
+easy_admin:
+    site_name: 'Fight2Feed'
+    design:
+        brand_color: '#e2514d'
+        assets:
+            favicon: 'http://www.fight2feed.org/favicon.ico'
+    entities:
+        User:
+            class: App\Entity\User
+            list:
+                sort: 'email'
+                fields:
+                    - username
+                    - email
+                    - role
+                    - isActive
+        InvitationRequest:
+            class: App\Entity\InvitationRequest
+            list:
+                sort: 'email'

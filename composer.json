@@ -61,6 +61,10 @@
     "extra": {
         "symfony": {
             "allow-contrib": false
+        },
+        "heroku": {
+            "document-root": "public",
+            "index-document": "index.php"
         }
     }
 }

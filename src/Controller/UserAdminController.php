@@ -58,6 +58,7 @@ class UserAdminController extends BaseAdminController
             $this->encodeUserPassword($entity);
 
             // TODO don't encode/update password unless changed
+            // todo do this with a subscriber to PRE_UPDATE?
 
             $this->dispatch(EasyAdminEvents::PRE_UPDATE, ['entity' => $entity]);
 

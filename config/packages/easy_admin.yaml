@@ -12,7 +12,7 @@ easy_admin:
                 fields:
                     - username
                     - email
-                    - { property: password, type: repeated, type_options: { type: Symfony\Component\Form\Extension\Core\Type\PasswordType, first_options: { label: Password }, second_options: { label: 'Confirm Password' }, required: false } }
+                    - { property: password, type: repeated, type_options: { type: Symfony\Component\Form\Extension\Core\Type\PasswordType, first_options: { label: "Temp Password" }, second_options: { label: 'Confirm Temp Password' }, required: false } }
                     - { property: role, type: choice, type_options: { choices: { Donator: ROLE_DONATOR, Admin: ROLE_ADMIN, Organization: ROLE_ORG } } }
                     - isActive
             list:

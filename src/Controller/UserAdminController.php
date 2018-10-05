@@ -57,6 +57,8 @@ class UserAdminController extends BaseAdminController
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->encodeUserPassword($entity);
 
+            // TODO don't encode/update password unless changed
+
             $this->dispatch(EasyAdminEvents::PRE_UPDATE, ['entity' => $entity]);
 
             $this->executeDynamicMethod('preUpdate<EntityName>Entity', [$entity]);

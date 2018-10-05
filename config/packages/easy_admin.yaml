@@ -12,7 +12,7 @@ easy_admin:
                 fields:
                     - username
                     - email
-                    - { property: 'password', type: 'repeated', type_options: { type: Symfony\Component\Form\Extension\Core\Type\PasswordType, first_options: { label: 'Password' }, second_options: { label: 'Confirm Password' }, required: true } }
+                    - { property: 'password', type: 'repeated', type_options: { type: Symfony\Component\Form\Extension\Core\Type\PasswordType, first_options: { label: 'Password' }, second_options: { label: 'Confirm Password' }, required: false } }
                     - role
                     - isActive
             list:

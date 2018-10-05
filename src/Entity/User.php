@@ -55,6 +55,12 @@ class User implements UserInterface, \Serializable
      */
     private $isActive;
 
+    /**
+     * @var bool
+     * @ORM\Column(name="is_onboarded", type="boolean")
+     */
+    private $isOnboarded = false;
+
     public function __construct()
     {
         $this->isActive = true;
@@ -166,5 +172,21 @@ class User implements UserInterface, \Serializable
             $this->id,
             $this->username,
             $this->password) = unserialize($serialized, ['allowed_classes' => false]);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isOnboarded(): bool
+    {
+        return $this->isOnboarded;
+    }
+
+    /**
+     * @param bool $isOnboarded
+     */
+    public function setIsOnboarded(bool $isOnboarded): void
+    {
+        $this->isOnboarded = $isOnboarded;
     }
 }

@@ -1,4 +1,6 @@
 api_platform:
+    title: 'Fight2Feed API'
+    description: 'API providing data to the Fight2Feed mobile application'
     version: '1.0.0'
     mapping:
         paths: ['%kernel.project_dir%/src/Entity']

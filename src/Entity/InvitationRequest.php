@@ -10,8 +10,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ApiResource(
  *     collectionOperations={"post"},
- *     itemOperations={},
- *
+ *     itemOperations={"get"}
  * )
  * @ORM\Entity(repositoryClass="App\Repository\InvitationRequestRepository")
  */
@@ -38,7 +37,7 @@ class InvitationRequest
     private $email;
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=true)
      * @Assert\Length(max="1000")
      */
     private $description;

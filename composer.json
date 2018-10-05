@@ -65,8 +65,7 @@
         },
         "heroku": {
             "document-root": "public",
-            "index-document": "index.php",
-            "predeploy": "./bin/console doctrine:migrations:migrate -n"
+            "index-document": "index.php"
         }
     }
 }

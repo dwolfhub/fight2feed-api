@@ -4,6 +4,7 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Annotations\Annotation\Required;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use ApiPlatform\Core\Annotation\ApiResource;
@@ -23,26 +24,31 @@ class User implements UserInterface, \Serializable
 
     /**
      * @ORM\Column(type="string", length=25, unique=true)
+     * @Required()
      */
     private $username;
 
     /**
-     * @ORM\Column(type="string", length=25, unique=true)
+     * @ORM\Column(type="string", length=25)
+     * @Required()
      */
     private $role;
 
     /**
      * @ORM\Column(type="string", length=64)
+     * @Required()
      */
     private $password;
 
     /**
      * @ORM\Column(type="string", length=254, unique=true)
+     * @Required()
      */
     private $email;
 
     /**
      * @ORM\Column(name="is_active", type="boolean")
+     * @Required()
      */
     private $isActive;
 

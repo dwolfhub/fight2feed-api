@@ -7,6 +7,14 @@ easy_admin:
     entities:
         User:
             class: App\Entity\User
+            controller: App\Controller\UserAdminController
+            form:
+                fields:
+                    - username
+                    - email
+                    - { property: 'password', type: 'repeated', type_options: { type: Symfony\Component\Form\Extension\Core\Type\PasswordType, first_options: { label: 'Password' }, second_options: { label: 'Confirm Password' }, required: true } }
+                    - role
+                    - isActive
             list:
                 sort: 'email'
                 fields:

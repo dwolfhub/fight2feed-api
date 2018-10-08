@@ -1,6 +1,6 @@
 <?php
 
-namespace App\EventSubscriber;
+namespace App\EventSubscriber\EasyAdmin\User;
 
 use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Event\EasyAdminEvents;
@@ -26,11 +26,28 @@ class SendUserWelcomeEmailSubscriber implements EventSubscriberInterface
      */
     private $logger;
 
-    public function __construct(\Swift_Mailer $mailer, Environment $twig, LoggerInterface $logger)
-    {
+    /**
+     * @var string
+     */
+    private $fromEmail;
+
+    /**
+     * @var string
+     */
+    private $fromName;
+
+    public function __construct(
+        \Swift_Mailer $mailer,
+        Environment $twig,
+        LoggerInterface $logger,
+        string $fromEmail,
+        string $fromName
+    ) {
         $this->mailer = $mailer;
         $this->twig = $twig;
         $this->logger = $logger;
+        $this->fromEmail = $fromEmail;
+        $this->fromName = $fromName;
     }
 
     public function onEasyAdminPrePersist(GenericEvent $event)
@@ -58,7 +75,7 @@ class SendUserWelcomeEmailSubscriber implements EventSubscriberInterface
                     $this->twig->render('email/new-user-temp-password.txt.twig', $templateData),
                     'text/plain'
                 )
-                ->setFrom('danielrwolf5@gmail.com', 'Daniel Wolf')
+                ->setFrom($this->fromEmail, $this->fromName)
                 ->setTo($user->getEmail());
 
             $this->mailer->send($message);

@@ -4,12 +4,12 @@ namespace App\EventSubscriber;
 
 use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Event\EasyAdminEvents;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\EventDispatcher\GenericEvent;
-use Symfony\Component\HttpKernel\KernelEvents;
 use Twig\Environment;
 
-class PostUserCreateSubscriber implements EventSubscriberInterface
+class SendUserWelcomeEmailSubscriber implements EventSubscriberInterface
 {
     /**
      * @var \Swift_Mailer
@@ -21,10 +21,16 @@ class PostUserCreateSubscriber implements EventSubscriberInterface
      */
     private $twig;
 
-    public function __construct(\Swift_Mailer $mailer, Environment $twig)
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    public function __construct(\Swift_Mailer $mailer, Environment $twig, LoggerInterface $logger)
     {
         $this->mailer = $mailer;
         $this->twig = $twig;
+        $this->logger = $logger;
     }
 
     public function onEasyAdminPrePersist(GenericEvent $event)
@@ -58,14 +64,17 @@ class PostUserCreateSubscriber implements EventSubscriberInterface
             $this->mailer->send($message);
 
         } catch (\Twig_Error $twigError) {
-            // TODO LOG
+            $this->logger->critical('Twig_Error when rendering user welcome email', [
+                'message' => $twigError->getMessage(),
+                'code'    => $twigError->getCode(),
+                'trace'   => $twigError->getTraceAsString(),
+            ]);
         }
     }
 
     public static function getSubscribedEvents()
     {
         return [
-//            KernelEvents::REQUEST => 'onEasyAdminPrePersist',
             EasyAdminEvents::PRE_PERSIST => 'onEasyAdminPrePersist',
         ];
     }

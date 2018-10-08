@@ -5,6 +5,13 @@ easy_admin:
         brand_color: '#e2514d'
         assets:
             favicon: 'http://www.fight2feed.org/favicon.ico'
+        menu:
+            - entity: InvitationRequest
+              icon: id-card
+              label: Invitation Requests
+            - entity: User
+              icon: users
+              label: Users
     entities:
         User:
             class: App\Entity\User
@@ -69,4 +76,4 @@ easy_admin:
             class: App\Entity\InvitationRequest
             list:
                 sort: 'email'
-                title: Invitation Requests"
+                title: Invitation Requests

@@ -1,0 +1,14 @@
+{% set role = 'NONE' %}
+{% if value == 'ROLE_ADMIN' %}
+    {% set role = 'Admin' %}
+{% elseif value == 'ROLE_ORG' %}
+    {% set role = 'Org' %}
+{% elseif value == 'ROLE_DONATOR' %}
+    {% set role = 'Donator' %}
+{% endif %}
+
+{% if view == 'show' %}
+    {{ role|nl2br }}
+{% else %}
+    {{ role|striptags|easyadmin_truncate }}
+{% endif %}

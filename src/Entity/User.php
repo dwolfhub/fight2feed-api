@@ -5,13 +5,12 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use Doctrine\Common\Annotations\Annotation\Required;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ApiResource
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @UniqueEntity("username")
  * @UniqueEntity("email")
@@ -27,36 +26,47 @@ class User implements UserInterface, \Serializable
 
     /**
      * @ORM\Column(type="string", length=25, unique=true)
-     * @Required()
+     * @Assert\NotBlank()
      */
     private $username;
 
     /**
      * @ORM\Column(type="string", length=25)
-     * @Required()
+     * @Assert\NotBlank()
      */
     private $role;
 
     /**
      * @ORM\Column(type="string", length=64)
-     * @Required()
      */
     private $password;
 
     /**
+     * @var string
+     */
+    private $plainPassword;
+
+    /**
      * @ORM\Column(type="string", length=254, unique=true)
-     * @Required()
+     * @Assert\NotBlank()
+     * @Assert\Email()
      */
     private $email;
 
     /**
-     * @ORM\Column(name="is_active", type="boolean")
-     * @Required()
+     * @ORM\Column(type="string", length=254)
+     * @Assert\NotBlank()
+     * @Assert\Regex(pattern="/^\d{3}-\d{3}-\d{4}/", message="Please use phone number format XXX-XXX-XXXX.")
+     * @var string
      */
-    private $isActive;
+    private $phoneNumber;
 
     /**
-     * @var bool
+     * @ORM\Column(name="is_active", type="boolean")
+     */
+    private $isActive = true;
+
+    /**
      * @ORM\Column(name="is_onboarded", type="boolean")
      */
     private $isOnboarded = false;
@@ -139,7 +149,7 @@ class User implements UserInterface, \Serializable
         return $this;
     }
 
-    public function getIsActive(): ?bool
+    public function getIsActive(): bool
     {
         return $this->isActive;
     }
@@ -188,5 +198,31 @@ class User implements UserInterface, \Serializable
     public function setIsOnboarded(bool $isOnboarded): void
     {
         $this->isOnboarded = $isOnboarded;
+    }
+
+    public function getPlainPassword(): ?string
+    {
+        return $this->plainPassword;
+    }
+
+    public function setPlainPassword(string $plainPassword): void
+    {
+        $this->plainPassword = $plainPassword;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPhoneNumber(): ?string
+    {
+        return $this->phoneNumber;
+    }
+
+    /**
+     * @param mixed $phoneNumber
+     */
+    public function setPhoneNumber($phoneNumber): void
+    {
+        $this->phoneNumber = $phoneNumber;
     }
 }

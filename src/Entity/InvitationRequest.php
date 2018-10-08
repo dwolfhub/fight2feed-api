@@ -37,6 +37,14 @@ class InvitationRequest
     private $email;
 
     /**
+     * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
+     * @Assert\Regex(pattern="/^\d{3}-\d{3}-\d{4}/")
+     * @var string
+     */
+    private $phoneNumber;
+
+    /**
      * @ORM\Column(type="text", nullable=true)
      * @Assert\Length(max="1000")
      */
@@ -81,5 +89,21 @@ class InvitationRequest
         $this->description = $description;
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPhoneNumber(): ?string
+    {
+        return $this->phoneNumber;
+    }
+
+    /**
+     * @param string $phoneNumber
+     */
+    public function setPhoneNumber(string $phoneNumber): void
+    {
+        $this->phoneNumber = $phoneNumber;
     }
 }

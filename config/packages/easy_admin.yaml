@@ -1,28 +1,72 @@
 easy_admin:
     site_name: 'Fight2Feed'
     design:
+        form_theme: vertical
         brand_color: '#e2514d'
         assets:
             favicon: 'http://www.fight2feed.org/favicon.ico'
     entities:
         User:
             class: App\Entity\User
-            controller: App\Controller\UserAdminController
-            form:
+            new:
                 fields:
-                    - username
+                    - &userInfo
+                        type: 'group'
+                        label: 'User Info'
+                        icon: id-card
+                        css_class: col-sm-6
                     - email
-                    - { property: password, type: repeated, type_options: { type: Symfony\Component\Form\Extension\Core\Type\PasswordType, first_options: { label: "Temp Password" }, second_options: { label: 'Confirm Temp Password' }, required: false } }
-                    - { property: role, type: choice, type_options: { choices: { Donator: ROLE_DONATOR, Admin: ROLE_ADMIN, Organization: ROLE_ORG } } }
+                    - username
+                    -   &phoneNumber
+                        property: phoneNumber
+                        type: Symfony\Component\Form\Extension\Core\Type\TelType
+                        help: "Please use format: XXX-XXX-XXXX"
+                        type_options:
+                            required: true
+                            attr:
+                                placeholder: '000-000-0000'
+                    - &role
+                        property: role
+                        type: choice
+                        type_options:
+                            choices:
+                                Donator: ROLE_DONATOR
+                                Admin: ROLE_ADMIN
+                                Organization: ROLE_ORG
+            edit:
+                fields:
+                    - *userInfo
+                    - email
+                    - *phoneNumber
+                    - username
+                    - *role
                     - isActive
+                    -   type: 'group'
+                        label: 'Change Password'
+                        help: Leave these blank if you don't want to change the password.
+                        icon: key
+                        css_class: col-sm-6
+                    -   property: plain_password
+                        type: repeated
+                        type_options:
+                            type: Symfony\Component\Form\Extension\Core\Type\PasswordType
+                            first_options:
+                                label: Password
+                            second_options:
+                                label: Confirm Password
+                            required: true
             list:
+                title: Users
                 sort: 'email'
                 fields:
                     - username
                     - email
-                    - role
+                    - phoneNumber
+                    - { property: role, template: 'role.html.twig' }
                     - isActive
         InvitationRequest:
+            label: Invitation Request
             class: App\Entity\InvitationRequest
             list:
                 sort: 'email'
+                title: Invitation Requests"

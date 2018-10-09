@@ -1,12 +1,15 @@
 <?php
 
-namespace App\EventSubscriber\EasyAdmin\RequestInvitation;
+namespace App\EventSubscriber\ApiPlatform\RequestInvitation;
 
+use ApiPlatform\Core\EventListener\EventPriorities;
 use App\Entity\InvitationRequest;
-use EasyCorp\Bundle\EasyAdminBundle\Event\EasyAdminEvents;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\EventDispatcher\GenericEvent;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
+use Symfony\Component\HttpKernel\KernelEvents;
 use Twig\Environment;
 
 class NewInviteRequestAlertSubscriber implements EventSubscriberInterface
@@ -57,13 +60,31 @@ class NewInviteRequestAlertSubscriber implements EventSubscriberInterface
         $this->fromName = $fromName;
     }
 
-    public function onEasyAdminPostPersist(GenericEvent $event)
+    /**
+     * @return array
+     */
+    public static function getSubscribedEvents()
+    {
+        return [
+            KernelEvents::VIEW => ['sendEmail', EventPriorities::POST_WRITE],
+        ];
+    }
+
+    /**
+     * @param GenericEvent $event
+     */
+    public function sendEmail(GetResponseForControllerResultEvent $event)
     {
         /** @var InvitationRequest $inviteRequest */
-        $inviteRequest = $event->getSubject();
-        if (!($inviteRequest instanceof InvitationRequest)) {
+        $inviteRequest = $event->getControllerResult();
+        $method = $event->getRequest()->getMethod();
+        if (!$inviteRequest instanceof InvitationRequest || $method !== Request::METHOD_POST) {
             return;
         }
+
+        $templateData = [
+            'req' => $inviteRequest,
+        ];
 
         try {
             $to = explode(',', $this->newInviteEmails);
@@ -75,11 +96,11 @@ class NewInviteRequestAlertSubscriber implements EventSubscriberInterface
             $message = new \Swift_Message('New Invite Request for the Fight2Feed App');
             $message
                 ->setBody(
-                    $this->twig->render('email/new-invite-request.html.twig', $inviteRequest),
+                    $this->twig->render('email/new-invite-request.html.twig', $templateData),
                     'text/html'
                 )
                 ->addPart(
-                    $this->twig->render('email/new-invite-request.txt.twig', $inviteRequest),
+                    $this->twig->render('email/new-invite-request.txt.twig', $templateData),
                     'text/plain'
                 )
                 ->setFrom($this->fromEmail, $this->fromName)
@@ -94,12 +115,5 @@ class NewInviteRequestAlertSubscriber implements EventSubscriberInterface
                 'trace'   => $twigError->getTraceAsString(),
             ]);
         }
-    }
-
-    public static function getSubscribedEvents()
-    {
-        return [
-            EasyAdminEvents::POST_NEW => 'onEasyAdminPostPersist',
-        ];
     }
 }

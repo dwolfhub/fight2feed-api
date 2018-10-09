@@ -11,7 +11,6 @@ security:
         db_provider:
             entity:
                 class: App\Entity\User
-                property: username
 
     firewalls:
         dev:
@@ -19,8 +18,12 @@ security:
             security: false
 
         admin:
-            pattern: ^/(admin|login|docs)
+            pattern: ^/(admin|login|docs|logout)
             anonymous: true
+            user_checker: App\Security\UserStatusChecker
+            logout:
+                path: /logout
+                target: /login
             form_login:
                 check_path: /login
                 default_target_path: /admin

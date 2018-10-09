@@ -6,12 +6,12 @@ easy_admin:
         assets:
             favicon: 'http://www.fight2feed.org/favicon.ico'
         menu:
-            - entity: InvitationRequest
-              icon: id-card
-              label: Invitation Requests
-            - entity: User
-              icon: users
-              label: Users
+            -   entity: InvitationRequest
+                icon: id-card
+                label: Invitation Requests
+            -   entity: User
+                icon: users
+                label: Users
     entities:
         User:
             class: App\Entity\User
@@ -24,7 +24,7 @@ easy_admin:
                         css_class: col-sm-6
                     - email
                     - username
-                    -   &phoneNumber
+                    - &phoneNumber
                         property: phoneNumber
                         type: Symfony\Component\Form\Extension\Core\Type\TelType
                         help: "Please use format: XXX-XXX-XXXX"

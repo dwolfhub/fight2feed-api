@@ -4,9 +4,9 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -15,7 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @UniqueEntity("username")
  * @UniqueEntity("email")
  */
-class User implements UserInterface, \Serializable
+class User implements UserInterface, EquatableInterface
 {
     /**
      * @ORM\Column(type="integer")
@@ -149,7 +149,7 @@ class User implements UserInterface, \Serializable
         return $this;
     }
 
-    public function getIsActive(): bool
+    public function isActive(): bool
     {
         return $this->isActive;
     }
@@ -163,25 +163,6 @@ class User implements UserInterface, \Serializable
 
     public function eraseCredentials()
     {
-    }
-
-    /** @see \Serializable::serialize() */
-    public function serialize()
-    {
-        return serialize([
-            $this->id,
-            $this->username,
-            $this->password,
-        ]);
-    }
-
-    /** @see \Serializable::unserialize() */
-    public function unserialize($serialized)
-    {
-        list(
-            $this->id,
-            $this->username,
-            $this->password) = unserialize($serialized, ['allowed_classes' => false]);
     }
 
     /**
@@ -224,5 +205,26 @@ class User implements UserInterface, \Serializable
     public function setPhoneNumber($phoneNumber): void
     {
         $this->phoneNumber = $phoneNumber;
+    }
+
+    /**
+     * The equality comparison should neither be done by referential equality
+     * nor by comparing identities (i.e. getId() === getId()).
+     *
+     * However, you do not need to compare every attribute, but only those that
+     * are relevant for assessing whether re-authentication is required.
+     *
+     * @return bool
+     */
+    public function isEqualTo(UserInterface $user)
+    {
+        if ($user instanceof User) {
+            return $user->getRole() === $this->getRole()
+                   && $user->getUsername() === $this->getUsername()
+                   && $user->getId() === $this->getId()
+                   && $user->isActive() === $this->isActive();
+        }
+
+        return false;
     }
 }

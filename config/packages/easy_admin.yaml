@@ -23,7 +23,6 @@ easy_admin:
                         icon: id-card
                         css_class: col-sm-6
                     - email
-                    - username
                     - &phoneNumber
                         property: phoneNumber
                         type: Symfony\Component\Form\Extension\Core\Type\TelType

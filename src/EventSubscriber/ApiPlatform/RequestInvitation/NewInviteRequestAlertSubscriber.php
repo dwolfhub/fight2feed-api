@@ -78,7 +78,7 @@ class NewInviteRequestAlertSubscriber implements EventSubscriberInterface
         /** @var InvitationRequest $inviteRequest */
         $inviteRequest = $event->getControllerResult();
         $method = $event->getRequest()->getMethod();
-        if (!$inviteRequest instanceof InvitationRequest || $method !== Request::METHOD_POST) {
+        if (!$inviteRequest instanceof InvitationRequest || Request::METHOD_POST !== $method) {
             return;
         }
 
@@ -107,12 +107,11 @@ class NewInviteRequestAlertSubscriber implements EventSubscriberInterface
                 ->setTo($to);
 
             $this->mailer->send($message);
-
         } catch (\Twig_Error $twigError) {
             $this->logger->critical('Twig_Error when rendering new invite request email', [
                 'message' => $twigError->getMessage(),
-                'code'    => $twigError->getCode(),
-                'trace'   => $twigError->getTraceAsString(),
+                'code' => $twigError->getCode(),
+                'trace' => $twigError->getTraceAsString(),
             ]);
         }
     }

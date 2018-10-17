@@ -20,7 +20,6 @@ security:
         admin:
             pattern: ^/(admin|login|docs|logout)
             anonymous: true
-            user_checker: App\Security\UserStatusChecker
             logout:
                 path: /logout
                 target: /login
@@ -50,4 +49,5 @@ security:
         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/(admin|docs), roles: ROLE_ADMIN }
         - { path: ^/api/(login|invitation_requests), roles: IS_AUTHENTICATED_ANONYMOUSLY, methods: [POST] }
+        - { path: ^/api/media$, roles: ROLE_DONATOR, methods: [POST] }
         - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }

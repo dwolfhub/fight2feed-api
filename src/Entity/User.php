@@ -4,16 +4,29 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(
- *     itemOperations={"get"={"access_control"="object.getId() == user.getId()"}},
+ *     itemOperations={
+ *          "get"={
+ *              "access_control"="object.getId() == user.getId()",
+ *              "normalization_context"={"groups"={"gettable"}}
+ *          },
+ *          "put"={
+ *              "access_control"="object.getId() == user.getId()",
+ *              "denormalization_context"={"groups"={"settable"}},
+ *              "normalization_context"={"groups"={"gettable"}},
+ *              "validation_groups"={"UpdateApi"},
+ *          }
+ *     },
  *     collectionOperations={}
  * )
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
@@ -26,18 +39,31 @@ class User implements UserInterface, EquatableInterface
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @var int
+     *
+     * @Groups({"gettable"})
      */
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=25, unique=true)
-     * @Assert\NotBlank()
+     * @ORM\Column(type="string", length=25, unique=true, nullable=true)
+     * @var string
+     *
+     * @Groups({"gettable","settable"})
+     *
+     * @Assert\Length(min="8")
+     * @Assert\Type(type="alnum")
      */
     private $username;
 
     /**
      * @ORM\Column(type="string", length=25)
-     * @Assert\NotBlank()
+     * @var string
+     *
+     * @Groups({"gettable"})
+     *
+     * @Assert\NotBlank(groups={"CreateAdmin","UpdateAdmin"})
+     * @Assert\Choice({"ROLE_DONATOR","ROLE_ADMIN","ROLE_ORG"})
      */
     private $role;
 
@@ -48,37 +74,51 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * @var string
+     *
+     * @Groups({"settable"})
+     *
+     * @Assert\Length(min="6")
      */
     private $plainPassword;
 
     /**
      * @ORM\Column(type="string", length=254, unique=true)
-     * @Assert\NotBlank()
+     * @var string
+     *
+     * @Groups({"gettable","settable"})
+     *
+     * @Assert\NotBlank(groups={"CreateAdmin","UpdateAdmin"})
      * @Assert\Email()
      */
     private $email;
 
     /**
      * @ORM\Column(type="string", length=254)
-     * @Assert\NotBlank()
-     * @Assert\Regex(pattern="/^\d{3}-\d{3}-\d{4}/", message="Please use phone number format XXX-XXX-XXXX.")
      * @var string
+     *
+     * @Groups({"gettable","settable"})
+     *
+     * @Assert\NotBlank(groups={"CreateAdmin","UpdateAdmin"})
+     * @Assert\Regex(pattern="/^\d{3}-\d{3}-\d{4}/", message="Please use phone number format XXX-XXX-XXXX.")
      */
     private $phoneNumber;
 
     /**
      * @ORM\Column(name="is_active", type="boolean")
+     *
+     * @Groups({"gettable"})
      */
     private $isActive = true;
 
     /**
      * @ORM\Column(name="is_onboarded", type="boolean")
+     *
+     * @Groups({"gettable","settable"})
      */
     private $isOnboarded = false;
 
     public function __construct()
     {
-        $this->isActive = true;
     }
 
     public function getId()
@@ -154,7 +194,7 @@ class User implements UserInterface, EquatableInterface
         return $this;
     }
 
-    public function isActive(): bool
+    public function getIsActive(): bool
     {
         return $this->isActive;
     }
@@ -173,7 +213,7 @@ class User implements UserInterface, EquatableInterface
     /**
      * @return bool
      */
-    public function isOnboarded(): bool
+    public function getIsOnboarded(): bool
     {
         return $this->isOnboarded;
     }
@@ -227,7 +267,7 @@ class User implements UserInterface, EquatableInterface
             return $user->getRole() === $this->getRole()
                    && $user->getUsername() === $this->getUsername()
                    && $user->getId() === $this->getId()
-                   && $user->isActive() === $this->isActive();
+                   && $user->getIsActive() === $this->getIsActive();
         }
 
         return false;

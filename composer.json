@@ -16,7 +16,8 @@
         "symfony/profiler-pack": "^1.0",
         "symfony/security-bundle": "^4.1",
         "symfony/swiftmailer-bundle": "^3.2",
-        "symfony/yaml": "^4.1"
+        "symfony/yaml": "^4.1",
+        "vich/uploader-bundle": "^1.8"
     },
     "require-dev": {
         "symfony/dotenv": "^4.1",

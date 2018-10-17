@@ -16,6 +16,10 @@ easy_admin:
         User:
             class: App\Entity\User
             new:
+                form_options:
+                    validation_groups:
+                        - Default
+                        - CreateAdmin
                 fields:
                     - &userInfo
                         type: 'group'
@@ -40,6 +44,10 @@ easy_admin:
                                 Admin: ROLE_ADMIN
                                 Organization: ROLE_ORG
             edit:
+                form_options:
+                    validation_groups:
+                        - Default
+                        - UpdateAdmin
                 fields:
                     - *userInfo
                     - email
@@ -49,10 +57,12 @@ easy_admin:
                     - isActive
                     -   type: 'group'
                         label: 'Change Password'
-                        help: Leave these blank if you don't want to change the password.
+                        help: >
+                            Leave these blank if you don't want to change the password.
+                            Passwords must be at least 6 characters long.
                         icon: key
                         css_class: col-sm-6
-                    -   property: plain_password
+                    -   property: plainPassword
                         type: repeated
                         type_options:
                             type: Symfony\Component\Form\Extension\Core\Type\PasswordType
@@ -60,7 +70,7 @@ easy_admin:
                                 label: Password
                             second_options:
                                 label: Confirm Password
-                            required: true
+                            required: false
             list:
                 title: Users
                 sort: 'email'

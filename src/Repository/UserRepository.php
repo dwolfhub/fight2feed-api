@@ -38,9 +38,12 @@ class UserRepository extends ServiceEntityRepository implements UserLoaderInterf
 
         return $qb
             ->andWhere(
-                $qb->expr()->orX(
-                    $qb->expr()->eq('u.username', ':value'),
-                    $qb->expr()->eq('u.email', ':value')
+                $qb->expr()->andX(
+                    $qb->expr()->orX(
+                        $qb->expr()->eq('u.username', ':value'),
+                        $qb->expr()->eq('u.email', ':value')
+                    ),
+                    $qb->expr()->eq('u.isActive', '1')
                 )
             )
             ->setParameter('value', $username)

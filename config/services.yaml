@@ -38,3 +38,7 @@ services:
         arguments:
             $fromEmail: '%env(APP_FROM_EMAIL)%'
             $fromName: '%env(APP_FROM_NAME)%'
+
+    app.image_manager:
+        class: Intervention\Image\ImageManager
+    Intervention\Image\ImageManager: '@app.image_manager'

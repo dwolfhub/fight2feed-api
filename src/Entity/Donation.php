@@ -6,11 +6,14 @@ use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use DateTimeInterface;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     normalizationContext={"groups"={"gettable"}}
+ * )
  * @ORM\Entity(repositoryClass="App\Repository\DonationRepository")
  */
 class Donation
@@ -19,6 +22,7 @@ class Donation
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"gettable"})
      */
     private $id;
 
@@ -26,6 +30,7 @@ class Donation
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      * @Assert\Length(max="255")
+     * @Groups({"gettable"})
      */
     private $title;
 
@@ -33,19 +38,22 @@ class Donation
      * @ORM\Column(type="text")
      * @Assert\NotBlank()
      * @Assert\Length(max="1000")
+     * @Groups({"gettable"})
      */
     private $description;
 
     /**
      * @var MediaObject|null
-     * @ORM\OneToOne(targetEntity="App\Entity\MediaObject")
+     * @ORM\ManyToOne(targetEntity="App\Entity\MediaObject", fetch="EAGER")
      * @ORM\JoinColumn(nullable=true)
      * @ApiProperty(iri="http://schema.org/image")
+     * @Groups({"gettable"})
      */
     private $photo;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"gettable"})
      */
     private $createdDate;
 
@@ -53,6 +61,7 @@ class Donation
      * @ORM\Column(type="datetime")
      * @Assert\NotBlank()
      * @Assert\DateTime(format=DateTimeInterface::ISO8601)
+     * @Groups({"gettable"})
      */
     private $expirationDate;
 

@@ -92,6 +92,12 @@
     "egulias/email-validator": {
         "version": "2.1.6"
     },
+    "guzzlehttp/psr7": {
+        "version": "1.4.2"
+    },
+    "intervention/image": {
+        "version": "2.4.2"
+    },
     "ircmaxell/random-lib": {
         "version": "v1.2.0"
     },
@@ -154,6 +160,9 @@
     },
     "psr/container": {
         "version": "1.0.0"
+    },
+    "psr/http-message": {
+        "version": "1.0.1"
     },
     "psr/log": {
         "version": "1.0.2"

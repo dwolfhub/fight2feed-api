@@ -50,4 +50,5 @@ security:
         - { path: ^/(admin|docs), roles: ROLE_ADMIN }
         - { path: ^/api/(login|invitation_requests), roles: IS_AUTHENTICATED_ANONYMOUSLY, methods: [POST] }
         - { path: ^/api/media$, roles: ROLE_DONATOR, methods: [POST] }
+        - { path: ^/api/media, roles: ROLE_ADMIN }
         - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }

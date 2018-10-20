@@ -12,7 +12,9 @@ use DateTimeInterface;
 
 /**
  * @ApiResource(
- *     normalizationContext={"groups"={"gettable"}}
+ *     normalizationContext={"groups"={"gettable"}},
+ *     itemOperations={"get"},
+ *     collectionOperations={"post"}
  * )
  * @ORM\Entity(repositoryClass="App\Repository\DonationRepository")
  */
@@ -60,7 +62,7 @@ class Donation
     /**
      * @ORM\Column(type="datetime")
      * @Assert\NotBlank()
-     * @Assert\DateTime(format=DateTimeInterface::ISO8601)
+     * @Assert\DateTime()
      * @Groups({"gettable"})
      */
     private $expirationDate;

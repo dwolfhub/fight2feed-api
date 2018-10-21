@@ -12,6 +12,7 @@ use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use App\Controller\GetMeAction;
 
 /**
  * @ApiResource(
@@ -27,7 +28,14 @@ use Symfony\Component\Validator\Constraints as Assert;
  *              "validation_groups"={"UpdateApi"},
  *          }
  *     },
- *     collectionOperations={}
+ *     collectionOperations={
+ *          "special"={
+ *              "method"="GET",
+ *              "path"="/users/me",
+ *              "controller"=GetMeAction::class,
+ *              "normalization_context"={"groups"={"gettable"}}
+ *          },
+ *     }
  * )
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @UniqueEntity("username")

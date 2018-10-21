@@ -80,9 +80,17 @@ class Donation
      */
     private $expirationDate;
 
+    /**
+     * @ORM\Column(type="boolean")
+     * @Groups({"gettable","settable"})
+     * @var bool
+     */
+    private $active;
+
     public function __construct()
     {
         $this->setCreatedDate(new DateTime());
+        $this->active = false;
     }
 
     public function getId(): ?int
@@ -164,5 +172,21 @@ class Donation
     public function setCreator(?User $creator): void
     {
         $this->creator = $creator;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isActive(): bool
+    {
+        return $this->active;
+    }
+
+    /**
+     * @param bool $active
+     */
+    public function setActive(bool $active): void
+    {
+        $this->active = $active;
     }
 }

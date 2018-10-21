@@ -13,7 +13,13 @@ use DateTimeInterface;
 /**
  * @ApiResource(
  *     normalizationContext={"groups"={"gettable"}},
- *     itemOperations={"get"},
+ *     itemOperations={
+ *          "get",
+ *          "put"={
+ *              "denormalization_context"={"groups"={"settable"}},
+ *              "access_control"="object.getCreator().getId() === user.getId()"
+ *          }
+ *     },
  *     collectionOperations={"post"}
  * )
  * @ORM\Entity(repositoryClass="App\Repository\DonationRepository")
@@ -29,10 +35,17 @@ class Donation
     private $id;
 
     /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User")
+     * @ORM\JoinColumn(nullable=false)
+     * @var User|null
+     */
+    private $creator;
+
+    /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      * @Assert\Length(max="255")
-     * @Groups({"gettable"})
+     * @Groups({"gettable","settable"})
      */
     private $title;
 
@@ -40,7 +53,7 @@ class Donation
      * @ORM\Column(type="text")
      * @Assert\NotBlank()
      * @Assert\Length(max="1000")
-     * @Groups({"gettable"})
+     * @Groups({"gettable","settable"})
      */
     private $description;
 
@@ -49,7 +62,7 @@ class Donation
      * @ORM\ManyToOne(targetEntity="App\Entity\MediaObject", fetch="EAGER")
      * @ORM\JoinColumn(nullable=true)
      * @ApiProperty(iri="http://schema.org/image")
-     * @Groups({"gettable"})
+     * @Groups({"gettable","settable"})
      */
     private $photo;
 
@@ -63,7 +76,7 @@ class Donation
      * @ORM\Column(type="datetime")
      * @Assert\NotBlank()
      * @Assert\DateTime()
-     * @Groups({"gettable"})
+     * @Groups({"gettable","settable"})
      */
     private $expirationDate;
 
@@ -135,5 +148,21 @@ class Donation
         $this->expirationDate = $expirationDate;
 
         return $this;
+    }
+
+    /**
+     * @return User|null
+     */
+    public function getCreator(): ?User
+    {
+        return $this->creator;
+    }
+
+    /**
+     * @param User|null $creator
+     */
+    public function setCreator(?User $creator): void
+    {
+        $this->creator = $creator;
     }
 }

@@ -18,8 +18,9 @@ class GetMeAction
      * @throws AccessDeniedException
      * @return User
      */
-    public function __invoke(UserInterface $user): User
+    public function __invoke(Usernterface $user): User
     {
+
         if (!$user instanceof User) {
             throw new AccessDeniedException();
         }

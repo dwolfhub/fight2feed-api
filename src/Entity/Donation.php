@@ -2,16 +2,23 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
+use App\Annotation\ActiveAware;
+use App\Annotation\NotExpiredAware;
+use App\Filter\ActiveFilter;
 use DateTime;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
-use DateTimeInterface;
 
 /**
  * @ApiResource(
+ *     attributes={"pagination_items_per_page"=15},
  *     normalizationContext={"groups"={"gettable"}},
  *     itemOperations={
  *          "get",
@@ -20,9 +27,15 @@ use DateTimeInterface;
  *              "access_control"="object.getCreator().getId() === user.getId()"
  *          }
  *     },
- *     collectionOperations={"post"}
+ *     collectionOperations={
+ *          "post",
+ *          "get"
+ *      }
  * )
+ * @ApiFilter(OrderFilter::class, properties={"title", "createdDate", "expirationDate"}, arguments={"orderParameterName"="order"})
  * @ORM\Entity(repositoryClass="App\Repository\DonationRepository")
+ * @ActiveAware()
+ * @NotExpiredAware()
  */
 class Donation
 {
@@ -134,24 +147,24 @@ class Donation
         return $this;
     }
 
-    public function getCreatedDate(): ?\DateTimeInterface
+    public function getCreatedDate(): ?DateTimeInterface
     {
         return $this->createdDate;
     }
 
-    public function setCreatedDate(\DateTimeInterface $createdDate): self
+    public function setCreatedDate(DateTimeInterface $createdDate): self
     {
         $this->createdDate = $createdDate;
 
         return $this;
     }
 
-    public function getExpirationDate(): ?\DateTimeInterface
+    public function getExpirationDate(): ?DateTimeInterface
     {
         return $this->expirationDate;
     }
 
-    public function setExpirationDate(\DateTimeInterface $expirationDate): self
+    public function setExpirationDate(DateTimeInterface $expirationDate): self
     {
         $this->expirationDate = $expirationDate;
 

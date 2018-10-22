@@ -20,11 +20,8 @@ class GetMeAction
      * @throws AccessDeniedException
      * @return User
      */
-    public function __invoke(UserInterface $user, LoggerInterface $logger): User
+    public function __invoke(UserInterface $user): User
     {
-        $logger->warning('warning!!!');
-        $logger->error('error!!!');
-        $logger->critical('critical!!!');
         if (!$user instanceof User) {
             throw new AccessDeniedException();
         }

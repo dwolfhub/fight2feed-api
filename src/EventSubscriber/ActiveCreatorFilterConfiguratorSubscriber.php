@@ -3,17 +3,16 @@
 namespace App\EventSubscriber;
 
 use ApiPlatform\Core\EventListener\EventPriorities;
-use App\Filter\ActiveFilter;
+use App\Filter\ActiveCreatorFilter;
 use Doctrine\Common\Annotations\Reader;
-use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 
-class ActiveFilterConfiguratorSubscriber implements EventSubscriberInterface
+class ActiveCreatorFilterConfiguratorSubscriber implements EventSubscriberInterface
 {
     /**
-     * @var ObjectManager
+     * @var EntityManagerInterface
      */
     private $em;
 
@@ -30,11 +29,9 @@ class ActiveFilterConfiguratorSubscriber implements EventSubscriberInterface
 
     public function onKernelRequest(GetResponseEvent $event): void
     {
-        if (!$event->getRequest()->attributes->get('id')) { // don't apply to items, only collections
-            /** @var ActiveFilter $filter */
-            $filter = $this->em->getFilters()->enable('active_filter');
-            $filter->setAnnotationReader($this->reader);
-        }
+        /** @var ActiveCreatorFilter $filter */
+        $filter = $this->em->getFilters()->enable('active_creator_filter');
+        $filter->setAnnotationReader($this->reader);
     }
 
     public static function getSubscribedEvents()

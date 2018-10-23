@@ -29,9 +29,11 @@ class NotExpiredFilterConfiguratorSubscriber implements EventSubscriberInterface
 
     public function onKernelRequest(GetResponseEvent $event): void
     {
-        /** @var NotExpiredFilter $filter */
-        $filter = $this->em->getFilters()->enable('not_expired_filter');
-        $filter->setAnnotationReader($this->reader);
+        if (!$event->getRequest()->attributes->get('id')) {
+            /** @var NotExpiredFilter $filter */
+            $filter = $this->em->getFilters()->enable('not_expired_filter');
+            $filter->setAnnotationReader($this->reader);
+        }
     }
 
     public static function getSubscribedEvents()

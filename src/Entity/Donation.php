@@ -8,6 +8,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use App\Annotation\ActiveAware;
+use App\Annotation\ActiveCreatorAware;
 use App\Annotation\NotExpiredAware;
 use App\Filter\ActiveFilter;
 use DateTime;
@@ -34,7 +35,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  * )
  * @ApiFilter(OrderFilter::class, properties={"title", "createdDate", "expirationDate"}, arguments={"orderParameterName"="order"})
  * @ORM\Entity(repositoryClass="App\Repository\DonationRepository")
+ *
  * @ActiveAware()
+ * @ActiveCreatorAware()
  * @NotExpiredAware()
  */
 class Donation

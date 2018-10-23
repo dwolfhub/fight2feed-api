@@ -30,5 +30,7 @@ doctrine:
         filters:
             active_filter:
                 class: App\Filter\ActiveFilter
+            active_creator_filter:
+                class: App\Filter\ActiveCreatorFilter
             not_expired_filter:
                 class: App\Filter\NotExpiredFilter

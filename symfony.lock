@@ -92,6 +92,9 @@
     "egulias/email-validator": {
         "version": "2.1.6"
     },
+    "gesdinet/jwt-refresh-token-bundle": {
+        "version": "v0.5.3"
+    },
     "guzzlehttp/psr7": {
         "version": "1.4.2"
     },

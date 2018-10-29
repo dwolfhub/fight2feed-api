@@ -1,6 +1,6 @@
 <?php
 
-namespace App\EventSubscriber;
+namespace App\EventSubscriber\ApiPlatform;
 
 use ApiPlatform\Core\EventListener\EventPriorities;
 use App\Filter\ActiveFilter;

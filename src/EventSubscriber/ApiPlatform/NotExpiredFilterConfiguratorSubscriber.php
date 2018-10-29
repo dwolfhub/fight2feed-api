@@ -1,15 +1,15 @@
 <?php
 
-namespace App\EventSubscriber;
+namespace App\EventSubscriber\ApiPlatform;
 
 use ApiPlatform\Core\EventListener\EventPriorities;
-use App\Filter\ActiveCreatorFilter;
+use App\Filter\NotExpiredFilter;
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 
-class ActiveCreatorFilterConfiguratorSubscriber implements EventSubscriberInterface
+class NotExpiredFilterConfiguratorSubscriber implements EventSubscriberInterface
 {
     /**
      * @var EntityManagerInterface
@@ -29,15 +29,17 @@ class ActiveCreatorFilterConfiguratorSubscriber implements EventSubscriberInterf
 
     public function onKernelRequest(GetResponseEvent $event): void
     {
-        /** @var ActiveCreatorFilter $filter */
-        $filter = $this->em->getFilters()->enable('active_creator_filter');
-        $filter->setAnnotationReader($this->reader);
+        if (!$event->getRequest()->attributes->get('id')) {
+            /** @var NotExpiredFilter $filter */
+            $filter = $this->em->getFilters()->enable('not_expired_filter');
+            $filter->setAnnotationReader($this->reader);
+        }
     }
 
     public static function getSubscribedEvents()
     {
         return [
-            'kernel.request' => ['onKernelRequest', EventPriorities::PRE_READ],
+           'kernel.request' => ['onKernelRequest', EventPriorities::PRE_READ],
         ];
     }
 }

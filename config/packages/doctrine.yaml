@@ -34,3 +34,5 @@ doctrine:
                 class: App\Filter\ActiveCreatorFilter
             not_expired_filter:
                 class: App\Filter\NotExpiredFilter
+            current_user_filter:
+                class: App\Filter\CurrentUserFilter

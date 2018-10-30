@@ -3,12 +3,28 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Annotation\CurrentUserAware;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     denormalizationContext={"groups"={"settable"}},
+ *     normalizationContext={"groups"={"gettable"}},
+ *     itemOperations={
+ *          "get"={
+ *              "access_control"="object.getUser().getId() === user.getId()"
+ *          },
+ *          "put"={
+ *              "access_control"="object.getUser().getId() === user.getId()"
+ *          },
+ *          "delete"={
+ *              "access_control"="object.getUser().getId() === user.getId()"
+ *          },
+ *     }
+ * )
  * @ORM\Entity(repositoryClass="App\Repository\AddressRepository")
+ * @CurrentUserAware()
  */
 class Address
 {
@@ -21,31 +37,31 @@ class Address
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"gettable"})
+     * @Groups({"gettable","settable"})
      */
     private $line1;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"gettable"})
+     * @Groups({"gettable","settable"})
      */
     private $line2;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"gettable"})
+     * @Groups({"gettable","settable"})
      */
     private $city;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"gettable"})
+     * @Groups({"gettable","settable"})
      */
     private $state;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"gettable"})
+     * @Groups({"gettable","settable"})
      */
     private $zip;
 
@@ -61,6 +77,11 @@ class Address
      * @var Donation[]
      */
     private $donations;
+
+    public function __construct()
+    {
+        $this->donations = [];
+    }
 
     public function getId(): ?int
     {

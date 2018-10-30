@@ -73,7 +73,7 @@ class Donation
 
     /**
      * @var MediaObject|null
-     * @ORM\ManyToOne(targetEntity="App\Entity\MediaObject", fetch="EAGER")
+     * @ORM\ManyToOne(targetEntity="App\Entity\MediaObject")
      * @ORM\JoinColumn(nullable=true)
      * @ApiProperty(iri="http://schema.org/image")
      * @Groups({"gettable","settable"})
@@ -100,6 +100,12 @@ class Donation
      * @var bool
      */
     private $active;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Address", fetch="EAGER")
+     * @Groups({"gettable","settable"})
+     */
+    private $address;
 
     public function __construct()
     {
@@ -202,5 +208,21 @@ class Donation
     public function setActive(bool $active): void
     {
         $this->active = $active;
+    }
+
+    /**
+     * @return Address
+     */
+    public function getAddress(): Address
+    {
+        return $this->address;
+    }
+
+    /**
+     * @param Address $address
+     */
+    public function setAddress(Address $address): void
+    {
+        $this->address = $address;
     }
 }

@@ -6,6 +6,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use App\Annotation\CurrentUserAware;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(
@@ -39,30 +40,40 @@ class Address
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"gettable","settable"})
+     * @Assert\NotBlank()
+     * @Assert\Length(max="255")
      */
     private $streetAddress;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"gettable","settable"})
+     * @Assert\NotBlank()
+     * @Assert\Length(max="255")
      */
     private $addressLocality;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"gettable","settable"})
+     * @Assert\NotBlank()
+     * @Assert\Length(max="255")
      */
     private $addressRegion;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"gettable","settable"})
+     * @Assert\NotBlank()
+     * @Assert\Length(max="16")
      */
     private $postalCode;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"gettable","settable"})
+     * @Assert\NotBlank()
+     * @Assert\Length(max="255")
      */
     private $addressCountry;
 

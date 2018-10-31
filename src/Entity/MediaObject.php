@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Annotation\CurrentUserAware;
+use App\Api\CreatableInterface;
 use App\Controller\CreateMediaObjectAction;
 use Doctrine\ORM\Mapping as ORM;
 use Serializable;
@@ -23,8 +25,9 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  *     },
  * })
  * @Vich\Uploadable
+ * @CurrentUserAware(userIdField="creator_id")
  */
-class MediaObject
+class MediaObject implements CreatableInterface
 {
     /**
      * @var int
@@ -33,6 +36,13 @@ class MediaObject
      * @ORM\Column(type="integer")
      */
     private $id;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User")
+     * @ORM\JoinColumn(nullable=false)
+     * @var User|null
+     */
+    private $creator;
 
     /**
      * @var File|null
@@ -96,5 +106,21 @@ class MediaObject
     public function setContentUrl(?string $contentUrl): void
     {
         $this->contentUrl = $contentUrl;
+    }
+
+    /**
+     * @return User
+     */
+    public function getCreator(): User
+    {
+        return $this->creator;
+    }
+
+    /**
+     * @param User $creator
+     */
+    public function setCreator(User $creator): void
+    {
+        $this->creator = $creator;
     }
 }

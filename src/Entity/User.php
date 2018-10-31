@@ -6,6 +6,7 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Controller\GetMeAction;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -14,7 +15,6 @@ use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
-use App\Controller\GetMeAction;
 
 /**
  * @ApiResource(
@@ -78,6 +78,8 @@ class User implements UserInterface, EquatableInterface
     private $role;
 
     /**
+     * @var string
+     *
      * @ORM\Column(type="string", length=64)
      */
     private $password;
@@ -115,6 +117,7 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * @ORM\Column(name="is_active", type="boolean")
+     * @var bool
      *
      * @Groups({"gettable"})
      */
@@ -122,6 +125,7 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * @ORM\Column(name="is_onboarded", type="boolean")
+     * @var bool
      *
      * @Groups({"gettable","settable"})
      */
@@ -130,20 +134,40 @@ class User implements UserInterface, EquatableInterface
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Address", mappedBy="user", orphanRemoval=true)
      * @ApiProperty(iri="http://schema.org/image")
+     * @var Address[]
+     *
      * @Groups({"gettable"})
      */
     private $addresses;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\MediaObject", mappedBy="creator")
+     * @var MediaObject[]
+     */
+    private $mediaObjects;
+
+    /**
+     * User constructor.
+     */
     public function __construct()
     {
         $this->addresses = new ArrayCollection();
+        $this->mediaObjects = new ArrayCollection();
     }
 
+    /**
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
     }
 
+    /**
+     * @param int $id
+     *
+     * @return $this
+     */
     public function setId(int $id)
     {
         $this->id = $id;
@@ -151,11 +175,19 @@ class User implements UserInterface, EquatableInterface
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getUsername()
     {
         return $this->username;
     }
 
+    /**
+     * @param string $username
+     *
+     * @return $this
+     */
     public function setUsername(string $username)
     {
         $this->username = $username;
@@ -163,16 +195,27 @@ class User implements UserInterface, EquatableInterface
         return $this;
     }
 
+    /**
+     * @return null|string
+     */
     public function getSalt()
     {
         return null;
     }
 
+    /**
+     * @return string
+     */
     public function getPassword()
     {
         return $this->password;
     }
 
+    /**
+     * @param string $password
+     *
+     * @return $this
+     */
     public function setPassword(string $password)
     {
         $this->password = $password;
@@ -180,11 +223,19 @@ class User implements UserInterface, EquatableInterface
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getRole()
     {
         return $this->role;
     }
 
+    /**
+     * @param string $role
+     *
+     * @return $this
+     */
     public function setRole(string $role)
     {
         $this->role = $role;
@@ -200,11 +251,19 @@ class User implements UserInterface, EquatableInterface
         return [$this->getRole()];
     }
 
+    /**
+     * @return null|string
+     */
     public function getEmail(): ?string
     {
         return $this->email;
     }
 
+    /**
+     * @param string $email
+     *
+     * @return $this
+     */
     public function setEmail(string $email)
     {
         $this->email = $email;
@@ -212,11 +271,19 @@ class User implements UserInterface, EquatableInterface
         return $this;
     }
 
+    /**
+     * @return bool
+     */
     public function getIsActive(): bool
     {
         return $this->isActive;
     }
 
+    /**
+     * @param bool $isActive
+     *
+     * @return $this
+     */
     public function setIsActive(bool $isActive)
     {
         $this->isActive = $isActive;
@@ -224,6 +291,9 @@ class User implements UserInterface, EquatableInterface
         return $this;
     }
 
+    /**
+     *
+     */
     public function eraseCredentials()
     {
     }
@@ -244,11 +314,17 @@ class User implements UserInterface, EquatableInterface
         $this->isOnboarded = $isOnboarded;
     }
 
+    /**
+     * @return null|string
+     */
     public function getPlainPassword(): ?string
     {
         return $this->plainPassword;
     }
 
+    /**
+     * @param string $plainPassword
+     */
     public function setPlainPassword(string $plainPassword): void
     {
         $this->plainPassword = $plainPassword;
@@ -271,11 +347,7 @@ class User implements UserInterface, EquatableInterface
     }
 
     /**
-     * The equality comparison should neither be done by referential equality
-     * nor by comparing identities (i.e. getId() === getId()).
-     *
-     * However, you do not need to compare every attribute, but only those that
-     * are relevant for assessing whether re-authentication is required.
+     * @param UserInterface $user
      *
      * @return bool
      */
@@ -299,6 +371,11 @@ class User implements UserInterface, EquatableInterface
         return $this->addresses;
     }
 
+    /**
+     * @param Address $address
+     *
+     * @return User
+     */
     public function addAddress(Address $address): self
     {
         if (!$this->addresses->contains($address)) {
@@ -309,6 +386,11 @@ class User implements UserInterface, EquatableInterface
         return $this;
     }
 
+    /**
+     * @param Address $address
+     *
+     * @return User
+     */
     public function removeAddress(Address $address): self
     {
         if ($this->addresses->contains($address)) {

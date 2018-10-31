@@ -9,6 +9,7 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use App\Annotation\ActiveAware;
 use App\Annotation\ActiveCreatorAware;
 use App\Annotation\NotExpiredAware;
+use App\Api\CreatableInterface;
 use DateTime;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
@@ -38,7 +39,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ActiveCreatorAware()
  * @NotExpiredAware()
  */
-class Donation
+class Donation implements CreatableInterface
 {
     /**
      * @ORM\Id()
@@ -187,9 +188,9 @@ class Donation
     }
 
     /**
-     * @param User|null $creator
+     * @param User $creator
      */
-    public function setCreator(?User $creator): void
+    public function setCreator(User $creator): void
     {
         $this->creator = $creator;
     }

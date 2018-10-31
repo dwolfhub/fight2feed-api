@@ -1,20 +1,22 @@
 <?php
 
-namespace App\EventSubscriber\ApiPlatform\Donation;
+namespace App\EventSubscriber\ApiPlatform;
 
 use ApiPlatform\Core\EventListener\EventPriorities;
+use App\Api\CreatableInterface;
 use App\Entity\Donation;
 use App\Entity\User;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
+use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Security\Core\Security;
 
 /**
- * Class AddDonationCreatorSubscriber
+ * Class AddCreatorSubscriber
  * @package App\EventSubscriber\ApiPlatform\Donation
  */
-class AddDonationCreatorSubscriber implements EventSubscriberInterface
+class AddCreatorSubscriber implements EventSubscriberInterface
 {
     /**
      * @var Security
@@ -22,7 +24,7 @@ class AddDonationCreatorSubscriber implements EventSubscriberInterface
     private $security;
 
     /**
-     * AddDonationCreatorSubscriber constructor.
+     * AddCreatorSubscriber constructor.
      *
      * @param Security $security
      */
@@ -34,12 +36,12 @@ class AddDonationCreatorSubscriber implements EventSubscriberInterface
     /**
      * @param GetResponseForControllerResultEvent $event
      */
-    public function addDonationCreator(GetResponseForControllerResultEvent $event)
+    public function addCreator(GetResponseForControllerResultEvent $event)
     {
-        /** @var Donation $donation */
-        $donation = $event->getControllerResult();
+        /** @var CreatableInterface $donation */
+        $creatable = $event->getControllerResult();
         $method = $event->getRequest()->getMethod();
-        if (!$donation instanceof Donation || Request::METHOD_POST !== $method) {
+        if (!$creatable instanceof CreatableInterface || Request::METHOD_POST !== $method) {
             return;
         }
 
@@ -48,7 +50,7 @@ class AddDonationCreatorSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $donation->setCreator($user);
+        $creatable->setCreator($user);
     }
 
     /**
@@ -57,7 +59,7 @@ class AddDonationCreatorSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            'kernel.view' => ['addDonationCreator', EventPriorities::PRE_WRITE],
+            KernelEvents::VIEW => ['addCreator', EventPriorities::PRE_WRITE],
         ];
     }
 }

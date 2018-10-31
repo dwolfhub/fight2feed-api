@@ -9,6 +9,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource(
+ *     iri="http://schema.org/PostalAddress",
  *     denormalizationContext={"groups"={"settable"}},
  *     normalizationContext={"groups"={"gettable"}},
  *     itemOperations={
@@ -39,31 +40,31 @@ class Address
      * @ORM\Column(type="string", length=255)
      * @Groups({"gettable","settable"})
      */
-    private $line1;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"gettable","settable"})
-     */
-    private $line2;
+    private $streetAddress;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"gettable","settable"})
      */
-    private $city;
+    private $addressLocality;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"gettable","settable"})
      */
-    private $state;
+    private $addressRegion;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"gettable","settable"})
      */
-    private $zip;
+    private $postalCode;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Groups({"gettable","settable"})
+     */
+    private $addressCountry;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="addresses")
@@ -88,62 +89,50 @@ class Address
         return $this->id;
     }
 
-    public function getLine1(): ?string
+    public function getStreetAddress(): ?string
     {
-        return $this->line1;
+        return $this->streetAddress;
     }
 
-    public function setLine1(string $line1): self
+    public function setStreetAddress(string $streetAddress): self
     {
-        $this->line1 = $line1;
+        $this->streetAddress = $streetAddress;
 
         return $this;
     }
 
-    public function getLine2(): ?string
+    public function getAddressLocality(): ?string
     {
-        return $this->line2;
+        return $this->addressLocality;
     }
 
-    public function setLine2(?string $line2): self
+    public function setAddressLocality(string $addressLocality): self
     {
-        $this->line2 = $line2;
+        $this->addressLocality = $addressLocality;
 
         return $this;
     }
 
-    public function getCity(): ?string
+    public function getAddressRegion(): ?string
     {
-        return $this->city;
+        return $this->addressRegion;
     }
 
-    public function setCity(string $city): self
+    public function setAddressRegion(string $addressRegion): self
     {
-        $this->city = $city;
+        $this->addressRegion = $addressRegion;
 
         return $this;
     }
 
-    public function getState(): ?string
+    public function getPostalCode(): ?string
     {
-        return $this->state;
+        return $this->postalCode;
     }
 
-    public function setState(string $state): self
+    public function setPostalCode(string $postalCode): self
     {
-        $this->state = $state;
-
-        return $this;
-    }
-
-    public function getZip(): ?string
-    {
-        return $this->zip;
-    }
-
-    public function setZip(string $zip): self
-    {
-        $this->zip = $zip;
+        $this->postalCode = $postalCode;
 
         return $this;
     }
@@ -174,6 +163,22 @@ class Address
     public function setDonations(array $donations): void
     {
         $this->donations = $donations;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAddressCountry()
+    {
+        return $this->addressCountry;
+    }
+
+    /**
+     * @param mixed $addressCountry
+     */
+    public function setAddressCountry($addressCountry): void
+    {
+        $this->addressCountry = $addressCountry;
     }
 
 }

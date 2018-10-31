@@ -22,7 +22,7 @@ class SetAddressUserSubscriber implements EventSubscriberInterface
     private $security;
 
     /**
-     * AddDonationCreatorSubscriber constructor.
+     * AddCreatorSubscriber constructor.
      *
      * @param Security $security
      */

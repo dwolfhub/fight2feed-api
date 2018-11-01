@@ -95,17 +95,16 @@ class ResetRequestSubscriber implements EventSubscriberInterface
      */
     public function onKernelView(GetResponseForControllerResultEvent $event)
     {
-        $event->setResponse(new JsonResponse(null, 204));
 
         /** @var PasswordReset $resetRequest */
         $resetRequest = $event->getControllerResult();
-
         if (!$resetRequest instanceof PasswordReset) {
             return;
         }
 
-        $user = $this->userRepository->findOneBy(['email' => $resetRequest->getEmail()]);
+        $event->setResponse(new JsonResponse(null, 204));
 
+        $user = $this->userRepository->findOneBy(['email' => $resetRequest->getEmail()]);
         if (!$user) {
             return;
         }

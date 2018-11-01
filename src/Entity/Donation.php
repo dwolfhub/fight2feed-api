@@ -103,7 +103,7 @@ class Donation implements CreatableInterface
     private $active;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Address", fetch="EAGER")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Address", inversedBy="donations", fetch="EAGER")
      * @Groups({"gettable","settable"})
      */
     private $address;

@@ -147,12 +147,18 @@ class User implements UserInterface, EquatableInterface
     private $mediaObjects;
 
     /**
+     * @ORM\OneToMany(targetEntity="App\Entity\ResetToken", mappedBy="creator", orphanRemoval=true)
+     */
+    private $resetTokens;
+
+    /**
      * User constructor.
      */
     public function __construct()
     {
         $this->addresses = new ArrayCollection();
         $this->mediaObjects = new ArrayCollection();
+        $this->resetTokens = new ArrayCollection();
     }
 
     /**
@@ -398,6 +404,37 @@ class User implements UserInterface, EquatableInterface
             // set the owning side to null (unless already changed)
             if ($address->getUser() === $this) {
                 $address->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ResetToken[]
+     */
+    public function getResetTokens(): Collection
+    {
+        return $this->resetTokens;
+    }
+
+    public function addResetToken(ResetToken $resetToken): self
+    {
+        if (!$this->resetTokens->contains($resetToken)) {
+            $this->resetTokens[] = $resetToken;
+            $resetToken->setCreator($this);
+        }
+
+        return $this;
+    }
+
+    public function removeResetToken(ResetToken $resetToken): self
+    {
+        if ($this->resetTokens->contains($resetToken)) {
+            $this->resetTokens->removeElement($resetToken);
+            // set the owning side to null (unless already changed)
+            if ($resetToken->getCreator() === $this) {
+                $resetToken->setCreator(null);
             }
         }
 

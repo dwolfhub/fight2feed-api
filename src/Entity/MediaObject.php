@@ -8,7 +8,6 @@ use App\Annotation\CurrentUserAware;
 use App\Api\CreatableInterface;
 use App\Controller\CreateMediaObjectAction;
 use Doctrine\ORM\Mapping as ORM;
-use Serializable;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -16,14 +15,18 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ORM\Entity
- * @ApiResource(iri="http://schema.org/MediaObject", collectionOperations={
- *     "get",
- *     "post"={
- *         "method"="POST",
- *         "controller"=CreateMediaObjectAction::class,
- *         "defaults"={"_api_receive"=false},
- *     },
- * })
+ * @ApiResource(
+ *     iri="http://schema.org/MediaObject",
+ *     normalizationContext={"groups"={"media-gettable"}},
+ *     collectionOperations={
+ *          "get",
+ *          "post"={
+ *              "method"="POST",
+ *              "controller"=CreateMediaObjectAction::class,
+ *              "defaults"={"_api_receive"=false},
+ *          },
+ *      }
+ * )
  * @Vich\Uploadable
  * @CurrentUserAware(userIdField="creator_id")
  */
@@ -34,13 +37,15 @@ class MediaObject implements CreatableInterface
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"gettable","media-gettable"})
      */
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="mediaObjects")
      * @ORM\JoinColumn(nullable=false)
      * @var User|null
+     * @Groups({"media-gettable"})
      */
     private $creator;
 
@@ -56,7 +61,7 @@ class MediaObject implements CreatableInterface
      * @var string|null
      * @ORM\Column(nullable=true)
      * @ApiProperty(iri="http://schema.org/contentUrl")
-     * @Groups({"gettable"})
+     * @Groups({"gettable","media-gettable"})
      */
     public $contentUrl;
 

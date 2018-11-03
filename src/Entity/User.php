@@ -147,7 +147,7 @@ class User implements UserInterface, EquatableInterface
     private $mediaObjects;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\ResetToken", mappedBy="creator", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="PasswordResetCode", mappedBy="creator", orphanRemoval=true)
      */
     private $resetTokens;
 
@@ -411,14 +411,14 @@ class User implements UserInterface, EquatableInterface
     }
 
     /**
-     * @return Collection|ResetToken[]
+     * @return Collection|PasswordResetCode[]
      */
     public function getResetTokens(): Collection
     {
         return $this->resetTokens;
     }
 
-    public function addResetToken(ResetToken $resetToken): self
+    public function addResetToken(PasswordResetCode $resetToken): self
     {
         if (!$this->resetTokens->contains($resetToken)) {
             $this->resetTokens[] = $resetToken;
@@ -428,7 +428,7 @@ class User implements UserInterface, EquatableInterface
         return $this;
     }
 
-    public function removeResetToken(ResetToken $resetToken): self
+    public function removeResetToken(PasswordResetCode $resetToken): self
     {
         if ($this->resetTokens->contains($resetToken)) {
             $this->resetTokens->removeElement($resetToken);

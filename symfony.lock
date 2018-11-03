@@ -98,6 +98,15 @@
     "guzzlehttp/psr7": {
         "version": "1.4.2"
     },
+    "indragunawan/api-rate-limit-bundle": {
+        "version": "0.2",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "0.2",
+            "ref": "34979e3bdd275203d0831a200aa9462150449e17"
+        }
+    },
     "intervention/image": {
         "version": "2.4.2"
     },

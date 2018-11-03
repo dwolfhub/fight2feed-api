@@ -2,25 +2,25 @@
 
 namespace App\Repository;
 
-use App\Entity\ResetToken;
+use App\Entity\PasswordResetCode;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * @method ResetToken|null find($id, $lockMode = null, $lockVersion = null)
- * @method ResetToken|null findOneBy(array $criteria, array $orderBy = null)
- * @method ResetToken[]    findAll()
- * @method ResetToken[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method PasswordResetCode|null find($id, $lockMode = null, $lockVersion = null)
+ * @method PasswordResetCode|null findOneBy(array $criteria, array $orderBy = null)
+ * @method PasswordResetCode[]    findAll()
+ * @method PasswordResetCode[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ResetTokenRepository extends ServiceEntityRepository
+class PasswordResetCodeRepository extends ServiceEntityRepository
 {
     public function __construct(RegistryInterface $registry)
     {
-        parent::__construct($registry, ResetToken::class);
+        parent::__construct($registry, PasswordResetCode::class);
     }
 
 //    /**
-//     * @return ResetToken[] Returns an array of ResetToken objects
+//     * @return PasswordResetCode[] Returns an array of PasswordResetCode objects
 //     */
     /*
     public function findByExampleField($value)
@@ -37,7 +37,7 @@ class ResetTokenRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?ResetToken
+    public function findOneBySomeField($value): ?PasswordResetCode
     {
         return $this->createQueryBuilder('r')
             ->andWhere('r.exampleField = :val')

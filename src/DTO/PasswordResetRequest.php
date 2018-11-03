@@ -6,14 +6,14 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Class PasswordReset
+ * Class PasswordResetRequest
  * @package App\Entity
  * @ApiResource(
  *     itemOperations={},
- *     collectionOperations={"POST"={"path"="/password-reset"}}
+ *     collectionOperations={"POST"={"path"="/password-reset-request"}}
  * )
  */
-final class PasswordReset
+final class PasswordResetRequest
 {
     /**
      * @Assert\NotBlank()

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\EventSubscriber;
+namespace App\EventSubscriber\ApiPlatform\PasswordReset;
 
 use ApiPlatform\Core\EventListener\EventPriorities;
-use App\DTO\PasswordReset;
-use App\Entity\ResetToken;
+use App\DTO\PasswordResetRequest;
+use App\Entity\PasswordResetCode;
 use App\Repository\UserRepository;
 use DateInterval;
 use DateTime;
@@ -19,10 +19,10 @@ use Symfony\Component\HttpKernel\KernelEvents;
 use Twig\Environment;
 
 /**
- * Class ResetRequestSubscriber
+ * Class PasswordResetRequestSubscriber
  * @package App\EventSubscriber
  */
-class ResetRequestSubscriber implements EventSubscriberInterface
+class PasswordResetRequestSubscriber implements EventSubscriberInterface
 {
     /**
      * @var EntityManagerInterface
@@ -53,7 +53,7 @@ class ResetRequestSubscriber implements EventSubscriberInterface
     private $fromName;
 
     /**
-     * ResetRequestSubscriber constructor.
+     * PasswordResetRequestSubscriber constructor.
      *
      * @param EntityManagerInterface $entityManager
      * @param UserRepository $userRepository
@@ -96,9 +96,9 @@ class ResetRequestSubscriber implements EventSubscriberInterface
     public function onKernelView(GetResponseForControllerResultEvent $event)
     {
 
-        /** @var PasswordReset $resetRequest */
+        /** @var PasswordResetRequest $resetRequest */
         $resetRequest = $event->getControllerResult();
-        if (!$resetRequest instanceof PasswordReset) {
+        if (!$resetRequest instanceof PasswordResetRequest) {
             return;
         }
 
@@ -144,10 +144,10 @@ class ResetRequestSubscriber implements EventSubscriberInterface
         $expirationDate = new DateTime('now', new DateTimeZone('UTC'));
         $expirationDate->add(new DateInterval('PT3H')); // plus 3 hours
 
-        $resetToken = new ResetToken();
+        $resetToken = new PasswordResetCode();
         $resetToken->setCreator($user);
         $resetToken->setExpirationDate($expirationDate);
-        $resetToken->setToken($token);
+        $resetToken->setCode($token);
 
         $this->entityManager->persist($resetToken);
         $this->entityManager->flush();

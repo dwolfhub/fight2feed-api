@@ -6,9 +6,9 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\ResetTokenRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\PasswordResetCodeRepository")
  */
-class ResetToken
+class PasswordResetCode
 {
     /**
      * @ORM\Id()
@@ -24,9 +24,9 @@ class ResetToken
     private $creator;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=32)
      */
-    private $token;
+    private $code;
 
     /**
      * @ORM\Column(type="datetime")
@@ -50,14 +50,14 @@ class ResetToken
         return $this;
     }
 
-    public function getToken(): ?string
+    public function getCode(): ?string
     {
-        return $this->token;
+        return $this->code;
     }
 
-    public function setToken(string $token): self
+    public function setCode(string $code): self
     {
-        $this->token = $token;
+        $this->code = $code;
 
         return $this;
     }

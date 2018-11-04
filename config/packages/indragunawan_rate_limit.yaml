@@ -1,0 +1,6 @@
+indragunawan_api_rate_limit:
+    enabled: true
+    throttle:
+        default:
+            limit:  60
+            period: 60 # secs

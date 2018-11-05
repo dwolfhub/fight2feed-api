@@ -1,6 +1,6 @@
 <?php
 
-namespace App\EventSubscriber\ApiPlatform\RequestInvitation;
+namespace App\EventSubscriber\ApiPlatform\InvitationRequest;
 
 use ApiPlatform\Core\EventListener\EventPriorities;
 use App\Entity\InvitationRequest;

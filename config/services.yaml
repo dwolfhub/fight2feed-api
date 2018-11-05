@@ -29,7 +29,7 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
-    App\EventSubscriber\ApiPlatform\RequestInvitation\NewInviteRequestAlertSubscriber:
+    App\EventSubscriber\ApiPlatform\InvitationRequest\NewInviteRequestAlertSubscriber:
         arguments:
             $newInviteEmails: '%env(APP_NEW_INVITE_EMAILS)%'
             $fromEmail: '%env(APP_FROM_EMAIL)%'

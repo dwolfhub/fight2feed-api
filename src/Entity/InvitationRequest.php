@@ -3,14 +3,13 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use Doctrine\Common\Annotations\Annotation\Required;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(
  *     collectionOperations={"post"},
- *     itemOperations={"get"}
+ *     itemOperations={}
  * )
  * @ORM\Entity(repositoryClass="App\Repository\InvitationRequestRepository")
  */

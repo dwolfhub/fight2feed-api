@@ -4,6 +4,7 @@ namespace App\DTO;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Validator\PasswordResetCodeExists;
+use Indragunawan\ApiRateLimitBundle\Annotation\ApiRateLimit;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -15,6 +16,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     collectionOperations={"POST"={"path"="/password-reset-submit"}}
  * )
  * @PasswordResetCodeExists()
+ * @ApiRateLimit(enabled=true)
  */
 class PasswordResetSubmit
 {

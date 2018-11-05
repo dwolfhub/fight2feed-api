@@ -81,7 +81,6 @@ class PasswordResetSubmitSubscriber implements EventSubscriberInterface
      */
     public function onKernelView(GetResponseForControllerResultEvent $event)
     {
-
         /** @var PasswordResetSubmit $passwordResetRequest */
         $passwordResetRequest = $event->getControllerResult();
         if (!$passwordResetRequest instanceof PasswordResetSubmit) {
